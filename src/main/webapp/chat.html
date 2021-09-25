@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+   <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/goeasy-2.1.11.min.js"></script>
+    <script>
+        $(function (){
+            var p=null;
+            $.post("chatGetServlet",function (data){
+
+                var goeasy  = GoEasy.getInstance({
+                    host:"hangzhou.goeasy.io",  //若是新加坡区域：singapore.goeasy.io
+                    appkey:"BC-9fcff5d362334c25a29c3ee46e974aeb",
+                    modules:['im']//根据需要，传入‘pubsub’或'im’，或数组方式同时传入
+                });
+                goeasy.connect({
+                    id:data["send"], //pubsub选填，im必填
+                    data:{"avatar":"/www/xxx.png","nickname":"kk"}, //必须是一个对象，pubsub选填，im必填，用于上下线提醒和查询在线用户列表时，扩展更多的属性
+                    onSuccess: function () {  //连接成功
+                        console.log("GoEasy connect successfully.") //连接成功
+                    },
+                    onFailed: function (error) { //连接失败
+                        console.log("Failed to connect GoEasy, code:"+error.code+ ",error:"+error.content);
+                    },
+                    onProgress:function(attempts) { //连接或自动重连中
+                        console.log("GoEasy is connecting", attempts);
+                    }
+                });
+                var im = goeasy.im;
+                //创建消息, 内容最长不超过3K，可以发送字符串，对象和json格式字符串
+                $("#send").click(function (){
+                    var s={"message":$("#message").val()};
+                    $.post("chatSaveServlet",s);
+                    s=null;
+                    let textMessage = im.createTextMessage({
+                        text:$("#message").val(), //消息内容
+                        to : {
+                            type : GoEasy.IM_SCENE.PRIVATE,   //私聊还是群聊，群聊为GoEasy.IM_SCENE.GROUP
+                            id : data["get"],
+                            data:{"avatar":"/www/xxx.png","nickname":"Neo"} //好友扩展数据, 任意格式的字符串或者对象，用于更新会话列表conversation.data
+                        }
+                    });
+                    //发送消息
+                    $("#show").append("<li style='list-style-type: none;margin-right: 0px;background-color: #64ff4f;width: 30%'>"+$("#message").val()+"</li>");
+                    $("#message").val("");
+                    im.sendMessage({
+                        message:textMessage,
+                        onSuccess: function (message) { //发送成功
+                            console.log("Private message sent successfully.", message);
+                        },
+                        onFailed: function (error) { //发送失败
+                            console.log('Failed to send private message，code:' + error.code +' ,error ' + error.content);
+                        }
+                    });
+                });
+                var onPrivateMessageReceived = function(message) {
+                    //文字消息
+                    // {
+                    //     "messageId": "8f0e27a0c7e111eab347b726da4416bd",
+                    //     "timestamp": 1594958217087,
+                    //     "type": "text",
+                    //     "senderId": "3bb179af-bcc5-4fe0-9dac-c05688484649",
+                    //     "payload": {
+                    //         "text": "Hello, GoEasyIM"
+                    //     },
+                    //     "receiverId": "fdee46b0-4b01-4590-bdba-6586d7617f95"
+                    // }
+                    $("#show").append("<li style='list-style-type: none;background-color: #20ff23;width: 30%'>"+message["senderId"]+":"+message.payload["text"]+"</li>");
+                    console.log("received private message:" + JSON.stringify(message));
+                };
+                //监听和接收单聊消息
+                im.on(GoEasy.IM_EVENT.PRIVATE_MESSAGE_RECEIVED, onPrivateMessageReceived);
+                $("#quit").click(function (){
+                    $.post("removeChatServlet");
+                    location.href="./affectedPeople.html"
+                    goeasy.disconnect({
+                        onSuccess: function(){
+                            console.log("GoEasy disconnect successfully.")
+                        },
+                        onFailed: function(error){
+                            console.log("Failed to disconnect GoEasy, code:"+error.code+ ",error:"+error.content);
+                        }
+                    });
+                });
+            });
+
+        });
+
+    </script>
+</head>
+<body>
+<div class="row">
+  <div class="col-md-3"> </div>
+  <div class="col-md-6">
+    <div style="border: yellow solid 5px ; width: 100%;height: 400px;overflow: auto" >
+        <ul id="show">
+
+        </ul>
+    </div>
+      <form>
+          <textarea class="form-control" rows="5" style="width: 100%" id="message"></textarea>
+      </form>
+      <input class="btn btn-default" type="button" value="发送" id="send">
+      <input class="btn btn-default" type="button" value="退出" id="quit">
+  </div>
+  <div class="col-md-3"> </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>会话列表</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="js/bootstrap.min.js"></script>
+</head>
+<script>
+    $(function (){
+        $.post("mainChatMainServlet",function (data){
+            var p=data;
+            for (var i = 0; i < data.length; i++) {
+                $("#list").append("<label class='btn btn-primary' id='"+i+"'><input type='radio' name='options' id='option"+i+"'>"+p[i]["send"]+"</label><br>");//<label class="btn btn-primary"><input type="radio" name="options" id="option2"> Radio 2</label>
+            };
+            $("#1").click(function (){
+                var a={"send":p[0]["get"],"get":p[0]["send"]};
+                $.post("mainChatSendServlet",a);
+                location.href="./chat2.html";
+            });
+            $("#2").click(function (){
+                var a={"send":p[1]["get"],"get":p[1]["send"]};
+                $.post("mainChatSendServlet",a);
+                location.href="./chat2.html";
+            });
+            $("#3").click(function (){
+                var a={"send":p[2]["get"],"get":p[2]["send"]};
+                $.post("mainChatSendServlet",a);
+                location.href="./chat2.html";
+            });
+            $("#4").click(function (){
+                var a={"send":p[3]["get"],"get":p[3]["send"]};
+                $.post("mainChatSendServlet",a);
+                location.href="./chat2.html";
+            });
+            $("#5").click(function (){
+                var a={"send":p[4]["get"],"get":p[4]["send"]};
+                $.post("mainChatSendServlet",a);
+                location.href="./chat2.html";
+            });
+            $("#6").click(function (){
+                var a={"send":p[5]["get"],"get":p[5]["send"]};
+                $.post("mainChatSendServlet",a);
+                location.href="./chat2.html";
+            });
+            $("#7").click(function (){
+                var a={"send":p[6]["get"],"get":p[6]["send"]};
+                $.post("mainChatSendServlet",a);
+                location.href="./chat2.html";
+            });
+            $("#8").click(function (){
+                var a={"send":p[7]["get"],"get":p[7]["send"]};
+                $.post("mainChatSendServlet",a);
+                location.href="./chat2.html";
+            });
+            $("#9").click(function (){
+                var a={"send":p[8]["get"],"get":p[8]["send"]};
+                $.post("mainChatSendServlet",a);
+                location.href="./chat2.html";
+            });
+        });
+    })
+
+</script>
+<body>
+<div class="row">
+    <div class="col-md-1">
+        <div class="btn-group" data-toggle="buttons" id="list">
+
+        </div>
+    </div>
+    <div class="col-md-1">
+        <input class="btn btn-default" type="button" value="聊天" id="1">
+        <input class="btn btn-default" type="button" value="聊天" id="2">
+        <input class="btn btn-default" type="button" value="聊天" id="3">
+        <input class="btn btn-default" type="button" value="聊天" id="4">
+        <input class="btn btn-default" type="button" value="聊天" id="5">
+        <input class="btn btn-default" type="button" value="聊天" id="6">
+        <input class="btn btn-default" type="button" value="聊天" id="7">
+        <input class="btn btn-default" type="button" value="聊天" id="8">
+        <input class="btn btn-default" type="button" value="聊天" id="9">
+    </div>
+    <div class="col-md-7"></div>
+</div>
+</body>
+</html>

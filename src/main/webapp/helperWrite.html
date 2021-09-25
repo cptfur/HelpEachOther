@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>救助站点发布页面</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $("#submit").click(function (){
+            $.post("helperServlet",$("#information").serialize())
+        })
+    </script>
+</head>
+<body style="background-color: #e0e6ff">
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <form class="form-horizontal" id="information">
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">称呼:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="称呼">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="phonenumber" class="col-sm-2 control-label">电话号码:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="phonenumber" name="phonenumber" placeholder="联系电话">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="address" class="col-sm-2 control-label">地址:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="address" name="address" placeholder="地址">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="thing" class="col-sm-2 control-label">条件描述:</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" rows="5" id="thing" name="thing" placeholder="站点条件描述"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="number" class="col-sm-2 control-label">可以容纳人数:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="number" name="number"  style="width: 35%">
+                </div>
+            </div>
+            <input class="btn btn-default" type="button" value="提交" style="width: 20%;margin-left: 40%;background-color: #d5ffee" id="submit">
+        </form>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+</body>
+</html>

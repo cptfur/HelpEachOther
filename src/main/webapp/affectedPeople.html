@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>受灾者信息发布页面</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            var s=null;
+            var p = {"page": "0"};
+            $.post("affectedGetServlet", p, function (data) {
+                 s=data;
+                for (var i = 0; i < 6; i++) {
+                    $("#" + i + "1").text(s[i]["username"]);
+                    $("#" + i + "2").text(s[i]["phonenumber"]);
+                    $("#" + i + "3").text(s[i]["address"]);
+                    $("#" + i + "4").text(s[i]["thing"]);
+                }
+            });
+            $("#chat1").click(function (){
+                var x={"phonenumber":s[0]["phonenumber"]};
+                $.post("chatServlet",x);
+                location.href="chat.html";
+            });
+            $("#chat2").click(function (){
+                var a={"phonenumber":s[1]["phonenumber"]};
+                $.post("chatServlet",a);
+                location.href="chat.html";
+            });
+            $("#chat3").click(function (){
+                var a={"phonenumber":s[2]["phonenumber"]};
+                $.post("chatServlet",a);
+                location.href="chat.html";
+            });
+            $("#chat4").click(function (){
+                var a={"phonenumber":s[3]["phonenumber"]};
+                $.post("chatServlet",a);
+                location.href="chat.html";
+            });
+            $("#go1").click(function (){
+                window.location.href=" https://apis.map.qq.com/tools/routeplan/eword="+s[0]["address"]+"?referer=myapp&key=ZLXBZ-3UAO3-MYV3U-3SMBJ-TXW47-JCFKD&back=1";
+            });
+            $("#go2").click(function (){
+                window.location.href=" https://apis.map.qq.com/tools/routeplan/eword="+s[1]["address"]+"?referer=myapp&key=ZLXBZ-3UAO3-MYV3U-3SMBJ-TXW47-JCFKD&back=1";
+            });
+            $("#go3").click(function (){
+                window.location.href=" https://apis.map.qq.com/tools/routeplan/eword="+s[2]["address"]+"?referer=myapp&key=ZLXBZ-3UAO3-MYV3U-3SMBJ-TXW47-JCFKD&back=1";
+            });
+            $("#go4").click(function (){
+                window.location.href=" https://apis.map.qq.com/tools/routeplan/eword="+s[3]["address"]+"?referer=myapp&key=ZLXBZ-3UAO3-MYV3U-3SMBJ-TXW47-JCFKD&back=1";
+            });
+            $("#2").click(function () {
+                p = {"page": "6"};
+                $.post("affectedGetServlet", p, function (data) {
+                    var s=data;
+                    for (var i = 0; i < 6; i++) {
+                        $("#" + i + "1").text(s[i]["username"]);
+                        $("#" + i + "2").text(s[i]["phonenumber"]);
+                        $("#" + i + "3").text(s[i]["address"]);
+                        $("#" + i + "4").text(s[i]["thing"]);
+                    }
+                })
+            });
+
+        });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="./index.html" class="active">主页</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li ><a href="./people.html">个人空间<span class="sr-only">(current)</span></a></li>
+                <li><a href="./volunteer.html">志愿者入口</a></li>
+                <li><a href="./volunteerMessage.html">发布志愿者任务</a></li>
+                <li><a href="./mainchat.html">聊天界面</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">求救信息发布与查看<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="./affectedPeopleWrite.html">发布求救信息</a></li>
+                        <li><a href="./affectedPeople.html">查看求救信息</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">救援信息发布与查看<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="./helperWrite.html">发布救援站点信息</a></li>
+                        <li><a href="./helper.html">查看救援站点信息</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="row">
+    <div class="col-md-5">
+        <div style="border: 2px dotted black">
+           <ul>
+
+              <p> <li style="list-style-type: none ">称呼:</li>
+                  <span id="01"></span>
+               </p>
+              <p> <li style="list-style-type: none ">电话号码:</li>
+               <span id="02"></span></p>
+              <p> <li style="list-style-type: none ">地点:</li>
+               <span id="03"></span>
+               </p>
+               <p><li style="list-style-type: none ">现场情况描述:</li>
+               <span id="04"></span>
+               </p>
+           </ul>
+            <button type="button" class="btn btn-link" id="chat1">聊天</button>
+            <button type="button" class="btn btn-link" id="go1">前往</button>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5"><div style="border: 2px dotted black">
+        <ul>
+
+            <p> <li style="list-style-type: none ">称呼:</li>
+            <span id="11"></span>
+            </p>
+            <p> <li style="list-style-type: none ">电话号码:</li>
+            <span id="12"></span></p>
+            <p> <li style="list-style-type: none ">地点:</li>
+            <span id="13"></span>
+            </p>
+            <p><li style="list-style-type: none ">现场情况描述:</li>
+            <span id="14"></span>
+            </p>
+        </ul>
+        <button type="button" class="btn btn-link" id="chat2">聊天</button>
+        <button type="button" class="btn btn-link" id="go2">前往</button>
+    </div></div>
+</div>
+<div class="row">
+    <div class="col-md-5">
+        <div style="border: 2px dotted black">
+            <ul>
+
+                <p> <li style="list-style-type: none ">称呼:</li>
+                <span id="21"></span>
+                </p>
+                <p> <li style="list-style-type: none ">电话号码:</li>
+                <span id="22"></span></p>
+                <p> <li style="list-style-type: none ">地点:</li>
+                <span id="23"></span>
+                </p>
+                <p><li style="list-style-type: none ">现场情况描述:</li>
+                <span id="24"></span>
+                </p>
+            </ul>
+            <button type="button" class="btn btn-link" id="chat3">聊天</button>
+            <button type="button" class="btn btn-link" id="go3">前往</button>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5"><div style="border: 2px dotted black">
+        <ul>
+
+            <p> <li style="list-style-type: none ">称呼:</li>
+            <span id="31"></span>
+            </p>
+            <p> <li style="list-style-type: none ">电话号码:</li>
+            <span id="32"></span></p>
+            <p> <li style="list-style-type: none ">地点:</li>
+            <span id="33"></span>
+            </p>
+            <p><li style="list-style-type: none ">现场情况描述:</li>
+            <span id="34"></span>
+            </p>
+        </ul>
+        <button type="button" class="btn btn-link" id="chat4">聊天</button>
+        <button type="button" class="btn btn-link" id="go4">前往</button>
+    </div></div>
+</div>
+
+<nav aria-label="...">
+    <ul class="pagination">
+        <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+        <li id="1p"><a href="#" id="1" >1 <span class="sr-only">(current)</span></a></li>
+        <li id="2p"><a href="#" id="2">2 <span class="sr-only">(current)</span></a></li>
+    </ul>
+</nav>
+</body>
+</html>
